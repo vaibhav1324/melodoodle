@@ -1,0 +1,11 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.options": {
+    "rules": {
+      "prettier/prettier": "warn" // Locally report Prettier formatting as warnings.
+    }
+  }
+}
