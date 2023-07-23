@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 
 import { Flex } from '@chakra-ui/react';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, MotionProps } from 'framer-motion';
 
 const MotionFlex = motion(Flex);
 
@@ -15,7 +15,7 @@ const defaultOptions = {
 
 const withMotion = (
   WrappedComponent: FunctionComponent,
-  animateOptions?: any,
+  animateOptions?: MotionProps,
 ) => {
   const options = animateOptions || defaultOptions;
 

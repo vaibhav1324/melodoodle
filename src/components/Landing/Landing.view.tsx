@@ -1,8 +1,16 @@
 import React, { FC } from 'react';
 
+import { withMotion } from 'utils';
+
 import Carousel from './Carousel';
 
-import { Container, Logo, ActionButton, Description } from './Landing.style';
+import {
+  Logo,
+  Container,
+  Description,
+  ActionButton,
+  AnimationConfig,
+} from './Landing.style';
 
 const Landing: FC = () => {
   return (
@@ -22,4 +30,4 @@ const Landing: FC = () => {
   );
 };
 
-export default Landing;
+export default withMotion(Landing, AnimationConfig);
