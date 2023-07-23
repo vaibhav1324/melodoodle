@@ -34,10 +34,7 @@ const Keyboard: FC = () => {
         {whiteNotes.map((note, i) => (
           <WhiteKey
             key={note}
-            type={0}
-            index={i}
-            note={note}
-            isActive={activeKey === note}
+            animate={activeKey === note ? 'pressed' : 'notPressed'}
             onMouseUp={() => {
               onMouseUp(note);
               setActiveKey(null);
@@ -58,11 +55,8 @@ const Keyboard: FC = () => {
             note && (
               <BlackKey
                 key={note}
-                type={1}
-                index={i}
-                note={note}
+                animate={activeKey === note ? 'pressed' : 'notPressed'}
                 marginLeft={blackKeyMarginLeft[i]}
-                isActive={activeKey === note}
                 onMouseUp={() => {
                   onMouseUp(note);
                   setActiveKey(null);

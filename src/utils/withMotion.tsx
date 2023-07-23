@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 
 import { Flex } from '@chakra-ui/react';
 
@@ -13,13 +13,13 @@ const defaultOptions = {
   transition: { duration: 0.5, ease: 'easeInOut' },
 };
 
-const withMotion = (
-  WrappedComponent: FunctionComponent,
+const withMotion = <T extends object>(
+  WrappedComponent: FC<T>,
   animateOptions?: MotionProps,
 ) => {
   const options = animateOptions || defaultOptions;
 
-  const AnimatedPage: FunctionComponent = (props) => {
+  const AnimatedPage: FC<T> = (props) => {
     return (
       <AnimatePresence>
         <MotionFlex

@@ -12,7 +12,9 @@ import {
   AnimationConfig,
 } from './Landing.style';
 
-const Landing: FC = () => {
+import { LandingProps } from './Landing.props';
+
+const Landing: FC<LandingProps> = ({ onStartPress }) => {
   return (
     <Container direction={{ base: 'column', md: 'row' }} gap="100px">
       <Container p="0" align="center" gap="20px">
@@ -22,7 +24,7 @@ const Landing: FC = () => {
           to create a tune, then watch as our AI transforms your unique sound
           into a vibrant geometric pattern. Start your symphony of shapes now!
         </Description>
-        <ActionButton>Try it out</ActionButton>
+        <ActionButton onClick={onStartPress}>Try it out</ActionButton>
       </Container>
 
       <Carousel />

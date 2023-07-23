@@ -70,8 +70,8 @@ const keyMap: Record<string, string> = {
   ']': 'G5',
   Backspace: 'G#5',
   Enter: 'A5',
-  m: 'A#5',
-  n: 'B5',
+  n: 'A#5',
+  m: 'B5',
 };
 
 const notesMap: Record<string, string> = Object.entries(keyMap).reduce(
