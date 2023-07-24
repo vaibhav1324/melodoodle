@@ -31,7 +31,7 @@ const Carousel: FC = () => {
       {ASSETS.map(
         (asset, index) =>
           index === currentImage && (
-            <LottieContainer>
+            <LottieContainer key={index.toString()}>
               <Lottie {...lottieProps} animationData={asset} />
             </LottieContainer>
           ),

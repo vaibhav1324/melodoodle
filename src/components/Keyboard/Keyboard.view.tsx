@@ -15,6 +15,8 @@ import {
 
 import * as Tone from 'tone';
 
+import Countdown from './Countdown';
+
 import {
   Note,
   Title,
@@ -64,10 +66,12 @@ const Keyboard: FC = () => {
       const url = URL.createObjectURL(blob);
       const audio = new Audio(url);
 
-      setFile({
-        blob,
-        audio,
-      });
+      if (blob.size !== 0) {
+        setFile({
+          blob,
+          audio,
+        });
+      }
 
       setIsRecording(false);
 
@@ -152,9 +156,12 @@ const Keyboard: FC = () => {
       </Container>
 
       {isRecording && (
-        <BallContainer>
-          <RecordingBall />
-        </BallContainer>
+        <>
+          <BallContainer>
+            <RecordingBall />
+          </BallContainer>
+          <Countdown />
+        </>
       )}
 
       {file && (
@@ -162,7 +169,9 @@ const Keyboard: FC = () => {
           mb="20px"
           rightIcon={<MdPlayCircle size="22px" />}
           onClick={() => {
-            file.audio.play();
+            try {
+              file.audio?.play?.();
+            } catch (error) {}
           }}>
           Play Audio
         </Button>
