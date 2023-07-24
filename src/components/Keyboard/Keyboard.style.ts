@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
 import { chakraStyled } from 'utils';
@@ -16,9 +16,8 @@ export const Container = chakraStyled(Flex, {
 
 export const AnimationConfig = {
   initial: {
-    x: '90vw',
     opacity: 0,
-    scale: 0.2,
+    scale: 0.8,
   },
   animate: {
     x: 0,
@@ -26,14 +25,13 @@ export const AnimationConfig = {
     scale: 1,
   },
   exit: {
-    x: '-90vw',
     opacity: 0,
-    scale: 0.2,
+    scale: 0.8,
   },
   transition: {
     delay: 0.5,
-    duration: 1.5,
-    type: 'spring',
+    duration: 1,
+    ease: 'easeIn',
   },
 };
 
@@ -56,6 +54,7 @@ export const WhiteKey = chakraStyled(motion(Box) as any, {
   alignItems: 'flex-end',
   justifyContent: 'center',
   textTransform: 'uppercase',
+  shadow: 'md',
 });
 
 export const BlackKey = chakraStyled(motion(Box) as any, {
@@ -74,4 +73,46 @@ export const BlackKey = chakraStyled(motion(Box) as any, {
   alignItems: 'flex-end',
   justifyContent: 'center',
   textTransform: 'uppercase',
+  shadow: 'md',
+});
+
+export const Title = chakraStyled(Text, {
+  fontSize: '26px',
+  textAlign: 'center',
+  fontWeight: '600',
+  textShadow: '2px 2px 5px #ccc',
+});
+
+export const BottomContainer = chakraStyled(Flex, {
+  mt: '20px',
+  gap: '10px',
+  direction: 'column',
+});
+
+export const Note = chakraStyled(Text, {
+  mt: '20px',
+  fontSize: '12px',
+  fontStyle: 'italic',
+});
+
+export const BallContainer = chakraStyled(Box, {
+  p: '5px',
+  mb: '20px',
+  borderRadius: '80px',
+  border: '5px solid red',
+});
+
+export const RecordingBall = chakraStyled(motion(Box) as any, {
+  w: '50px',
+  h: '50px',
+  borderRadius: '50px',
+  bg: 'red',
+  animate: {
+    scale: [0.7, 1, 0.7],
+    opacity: [0.8, 1, 0.8],
+  },
+  transition: {
+    repeat: Infinity,
+    duration: 2,
+  },
 });

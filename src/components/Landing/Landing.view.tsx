@@ -16,7 +16,10 @@ import { LandingProps } from './Landing.props';
 
 const Landing: FC<LandingProps> = ({ onStartPress }) => {
   return (
-    <Container direction={{ base: 'column', md: 'row' }} gap="100px">
+    <Container
+      direction={{ base: 'column', md: 'row' }}
+      gap="100px"
+      overflow="hidden">
       <Container p="0" align="center" gap="20px">
         <Logo />
         <Description>
