@@ -84,7 +84,7 @@ export const LottieContainer = chakraStyled(motion(Flex) as any, {
 
 export const AnimationConfig = {
   initial: {
-    x: '90vw',
+    x: '-90vw',
     opacity: 0,
     scale: 0.2,
   },
@@ -101,6 +101,6 @@ export const AnimationConfig = {
   transition: {
     delay: 0.5,
     duration: 1.5,
-    type: 'spring',
+    type: 'tween',
   },
 };

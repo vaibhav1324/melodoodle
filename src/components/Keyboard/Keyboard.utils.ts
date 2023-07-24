@@ -8,7 +8,7 @@ type Synth = Tone.PolySynth<Tone.Synth<Tone.SynthOptions>>;
 
 export const useKeyboardListener = (
   synth: Synth,
-  setActiveKey: (_note: string | null) => void,
+  setActiveKeys: React.Dispatch<React.SetStateAction<string[]>>,
 ) => {
   useEffect(() => {
     let keyDownMap: Record<string, boolean> = {};
@@ -26,7 +26,7 @@ export const useKeyboardListener = (
 
       synth.triggerRelease(note);
 
-      setActiveKey(null);
+      setActiveKeys((prev) => prev.filter((p) => p !== note));
 
       keyDownMap[event.key] = false;
     };
@@ -44,7 +44,7 @@ export const useKeyboardListener = (
 
       synth.triggerAttack(keyMap[event.key]);
 
-      setActiveKey(note);
+      setActiveKeys((prev) => [...prev, note]);
 
       keyDownMap[event.key] = true;
     };

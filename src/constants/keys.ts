@@ -83,4 +83,4 @@ const notesMap: Record<string, string> = Object.entries(keyMap).reduce(
   {} as Record<string, string>,
 );
 
-export { blackNotes, whiteNotes, blackKeyMarginLeft, keyMap, notesMap };
+export { keyMap, notesMap, blackNotes, whiteNotes, blackKeyMarginLeft };

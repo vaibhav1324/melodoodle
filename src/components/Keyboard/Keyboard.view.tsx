@@ -42,8 +42,8 @@ const Keyboard: FC = () => {
   const recorder = useInitializer(new Tone.Recorder());
 
   const [file, setFile] = useState<FileType>(null);
+  const [activeKeys, setActiveKeys] = useState<string[]>([]);
   const [isRecording, setIsRecording] = useState<boolean>(false);
-  const [activeKey, setActiveKey] = useState<string | null>(null);
 
   const onRecordingStart = () => {
     if (isRecordingRef.current) {
@@ -85,7 +85,7 @@ const Keyboard: FC = () => {
     };
   }, []);
 
-  useKeyboardListener(synth, setActiveKey);
+  useKeyboardListener(synth, setActiveKeys);
 
   const { onMouseUp, onMouseDown } = useMouseEvents(synth);
 
@@ -96,18 +96,21 @@ const Keyboard: FC = () => {
         {whiteNotes.map((note, i) => (
           <WhiteKey
             key={note}
-            animate={activeKey === note ? 'pressed' : 'notPressed'}
+            animate={activeKeys.includes(note) ? 'pressed' : 'notPressed'}
             onMouseLeave={() => {
               onMouseUp(note);
-              setActiveKey(null);
+
+              setActiveKeys((prev) => prev.filter((p) => p !== note));
             }}
             onMouseUp={() => {
               onMouseUp(note);
-              setActiveKey(null);
+
+              setActiveKeys((prev) => prev.filter((p) => p !== note));
             }}
             onMouseDown={() => {
               onMouseDown(note);
-              setActiveKey(note);
+
+              setActiveKeys((prev) => [...prev, note]);
             }}>
             {notesMap[note] === 'Backspace'
               ? '⌫'
@@ -121,19 +124,22 @@ const Keyboard: FC = () => {
             note && (
               <BlackKey
                 key={note}
-                animate={activeKey === note ? 'pressed' : 'notPressed'}
+                animate={activeKeys.includes(note) ? 'pressed' : 'notPressed'}
                 marginLeft={blackKeyMarginLeft[i]}
                 onMouseLeave={() => {
                   onMouseUp(note);
-                  setActiveKey(null);
+
+                  setActiveKeys((prev) => prev.filter((p) => p !== note));
                 }}
                 onMouseUp={() => {
                   onMouseUp(note);
-                  setActiveKey(null);
+
+                  setActiveKeys((prev) => prev.filter((p) => p !== note));
                 }}
                 onMouseDown={() => {
                   onMouseDown(note);
-                  setActiveKey(note);
+
+                  setActiveKeys((prev) => [...prev, note]);
                 }}>
                 {notesMap[note] === 'Backspace'
                   ? '⌫'
