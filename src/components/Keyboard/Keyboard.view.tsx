@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 
 import { Button } from '@chakra-ui/react';
-import { MdPlayCircle } from 'react-icons/md';
+import { MdAttractions, MdPlayCircle } from 'react-icons/md';
 
 import { withMotion } from 'utils';
 import { useInitializer } from 'hooks';
@@ -30,15 +30,12 @@ import {
 
 import { useKeyboardListener, useMouseEvents } from './Keyboard.utils';
 
-type FileType = {
-  blob: Blob;
-  audio: HTMLAudioElement;
-} | null;
+import { NotesPlayed } from 'types/common';
+import { FileType, KeyboardProps } from './Keyboard.props';
 
 const synth = new Tone.PolySynth().toDestination();
 
-const Keyboard: FC = () => {
-  const isRecordingRef = useRef(false);
+const Keyboard: FC<KeyboardProps> = ({ onCreateArt }) => {
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
 
   const recorder = useInitializer(new Tone.Recorder());
@@ -46,19 +43,14 @@ const Keyboard: FC = () => {
   const [file, setFile] = useState<FileType>(null);
   const [activeKeys, setActiveKeys] = useState<string[]>([]);
   const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [notesPlayed, setNotesPlayed] = useState<NotesPlayed>([]);
 
   const onRecordingStart = () => {
-    if (isRecordingRef.current) {
-      return;
-    }
-
     Tone.Transport.start();
 
     Tone.Destination.connect(recorder);
 
     recorder.start();
-
-    isRecordingRef.current = true;
 
     timeoutIdRef.current = setTimeout(async () => {
       const blob = await recorder.stop();
@@ -74,9 +66,7 @@ const Keyboard: FC = () => {
       }
 
       setIsRecording(false);
-
-      isRecordingRef.current = false;
-    }, 18000);
+    }, 27000);
   };
 
   useEffect(() => {
@@ -89,9 +79,40 @@ const Keyboard: FC = () => {
     };
   }, []);
 
-  useKeyboardListener(synth, setActiveKeys);
+  useKeyboardListener(synth, setActiveKeys, setNotesPlayed);
 
   const { onMouseUp, onMouseDown } = useMouseEvents(synth);
+
+  const onKeyRelease = (note: string) => () => {
+    if (activeKeys.length === 0) {
+      return;
+    }
+
+    onMouseUp(note);
+
+    setActiveKeys((prev) => prev.filter((p) => p !== note));
+
+    setNotesPlayed((prevNotes) =>
+      prevNotes.map((n) =>
+        n.note === note && n.end === null ? { ...n, end: Tone.now() } : n,
+      ),
+    );
+  };
+
+  const onKeyAttack = (note: string) => () => {
+    onMouseDown(note);
+
+    setActiveKeys((prev) => [...prev, note]);
+
+    setNotesPlayed((prevNotes) => [
+      ...prevNotes,
+      {
+        note: note,
+        start: Tone.now(),
+        end: null,
+      },
+    ]);
+  };
 
   return (
     <Container position="relative" direction="column" overflow="hidden">
@@ -100,22 +121,10 @@ const Keyboard: FC = () => {
         {whiteNotes.map((note, i) => (
           <WhiteKey
             key={note}
-            animate={activeKeys.includes(note) ? 'pressed' : 'notPressed'}
-            onMouseLeave={() => {
-              onMouseUp(note);
-
-              setActiveKeys((prev) => prev.filter((p) => p !== note));
-            }}
-            onMouseUp={() => {
-              onMouseUp(note);
-
-              setActiveKeys((prev) => prev.filter((p) => p !== note));
-            }}
-            onMouseDown={() => {
-              onMouseDown(note);
-
-              setActiveKeys((prev) => [...prev, note]);
-            }}>
+            onMouseUp={onKeyRelease(note)}
+            onMouseDown={onKeyAttack(note)}
+            onMouseLeave={onKeyRelease(note)}
+            animate={activeKeys.includes(note) ? 'pressed' : 'notPressed'}>
             {notesMap[note] === 'Backspace'
               ? '⌫'
               : notesMap[note] === 'Enter'
@@ -128,23 +137,11 @@ const Keyboard: FC = () => {
             note && (
               <BlackKey
                 key={note}
-                animate={activeKeys.includes(note) ? 'pressed' : 'notPressed'}
+                onMouseUp={onKeyRelease(note)}
+                onMouseDown={onKeyAttack(note)}
+                onMouseLeave={onKeyRelease(note)}
                 marginLeft={blackKeyMarginLeft[i]}
-                onMouseLeave={() => {
-                  onMouseUp(note);
-
-                  setActiveKeys((prev) => prev.filter((p) => p !== note));
-                }}
-                onMouseUp={() => {
-                  onMouseUp(note);
-
-                  setActiveKeys((prev) => prev.filter((p) => p !== note));
-                }}
-                onMouseDown={() => {
-                  onMouseDown(note);
-
-                  setActiveKeys((prev) => [...prev, note]);
-                }}>
+                animate={activeKeys.includes(note) ? 'pressed' : 'notPressed'}>
                 {notesMap[note] === 'Backspace'
                   ? '⌫'
                   : notesMap[note] === 'Enter'
@@ -165,33 +162,47 @@ const Keyboard: FC = () => {
       )}
 
       {file && (
-        <Button
-          mb="20px"
-          rightIcon={<MdPlayCircle size="22px" />}
-          onClick={() => {
-            try {
-              file.audio?.play?.();
-            } catch (error) {}
-          }}>
-          Play Audio
-        </Button>
+        <>
+          <Button
+            mb="20px"
+            variant="outline"
+            rightIcon={<MdPlayCircle size="22px" />}
+            onClick={() => {
+              try {
+                file.audio.play();
+              } catch (error) {}
+            }}>
+            Play Audio
+          </Button>
+          <Button
+            rightIcon={<MdAttractions />}
+            variant="outline"
+            colorScheme="secondary"
+            onClick={() => onCreateArt(notesPlayed)}>
+            Create Art
+          </Button>
+        </>
       )}
 
-      <Button
-        isDisabled={isRecording}
-        colorScheme={isRecording ? 'red' : 'secondary'}
-        onClick={() => {
-          setFile(null);
+      {file === null && (
+        <>
+          <Button
+            isDisabled={isRecording}
+            colorScheme={isRecording ? 'red' : 'secondary'}
+            onClick={() => {
+              setFile(null);
+              setNotesPlayed([]);
+              setIsRecording((prev) => !prev);
 
-          setIsRecording((prev) => !prev);
-
-          onRecordingStart();
-        }}>
-        {isRecording ? 'Recording...' : 'Start Recording'}
-      </Button>
-      <Note>
-        Audio redording will start as soon as you press 'Start' button
-      </Note>
+              onRecordingStart();
+            }}>
+            {isRecording ? 'Recording...' : 'Start Recording'}
+          </Button>
+          <Note>
+            Audio redording will start as soon as you press 'Start' button
+          </Note>
+        </>
+      )}
     </Container>
   );
 };

@@ -4,11 +4,14 @@ import * as Tone from 'tone';
 
 import { keyMap } from 'constants/keys';
 
+import { NotesPlayed } from 'types/common';
+
 type Synth = Tone.PolySynth<Tone.Synth<Tone.SynthOptions>>;
 
 export const useKeyboardListener = (
   synth: Synth,
   setActiveKeys: React.Dispatch<React.SetStateAction<string[]>>,
+  setNotesPlayed: React.Dispatch<React.SetStateAction<NotesPlayed>>,
 ) => {
   useEffect(() => {
     let keyDownMap: Record<string, boolean> = {};
@@ -28,6 +31,12 @@ export const useKeyboardListener = (
 
       setActiveKeys((prev) => prev.filter((p) => p !== note));
 
+      setNotesPlayed((prevNotes) =>
+        prevNotes.map((n) =>
+          n.note === note && n.end === null ? { ...n, end: Tone.now() } : n,
+        ),
+      );
+
       keyDownMap[event.key] = false;
     };
 
@@ -45,6 +54,15 @@ export const useKeyboardListener = (
       synth.triggerAttack(keyMap[event.key]);
 
       setActiveKeys((prev) => [...prev, note]);
+
+      setNotesPlayed((prevNotes) => [
+        ...prevNotes,
+        {
+          note: note,
+          start: Tone.now(),
+          end: null,
+        },
+      ]);
 
       keyDownMap[event.key] = true;
     };
