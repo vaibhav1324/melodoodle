@@ -7,6 +7,7 @@ import { theme, withMotion } from 'utils';
 
 import SvgArt from 'components/SvgArt';
 import Landing from 'components/Landing';
+import GhButton from 'components/GhButton';
 import Keyboard from 'components/Keyboard';
 
 import { NotesPlayed } from 'types/common';
@@ -35,6 +36,8 @@ const App: React.FC = () => {
             notesPlayed={notesPlayedRef.current}
           />
         )}
+
+        <GhButton />
       </AnimatePresence>
     </ChakraProvider>
   );
