@@ -2,6 +2,7 @@
   "name": "melodoodle",
   "version": "0.0.1",
   "private": true,
+  "homepage": "https://vaibhav1324.github.io/melodoodle",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -11,7 +12,9 @@
     "check:format": "yarn prettier --check '**/*.{css,less,scss,html,ts,tsx,graphql,gql,json,js,jsx,md,yml,yaml}'",
     "check:types": "tsc",
     "prepare": "husky install",
-    "commit": "cz"
+    "commit": "cz",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.0",
