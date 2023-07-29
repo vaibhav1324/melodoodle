@@ -91,7 +91,7 @@ export const BottomContainer = chakraStyled(Flex, {
 
 export const Note = chakraStyled(Text, {
   mt: '20px',
-  fontSize: '12px',
+  fontSize: '14px',
   fontStyle: 'italic',
 });
 

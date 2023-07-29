@@ -40,7 +40,6 @@ export const Description = chakraStyled(Text, {
 export const ActionButton = chakraStyled(Button, {
   mt: '20px',
   w: '220px',
-  size: 'lg',
   alignSelf: 'center',
 });
 

@@ -29,7 +29,12 @@ const App: React.FC = () => {
             }}
           />
         )}
-        {index === 2 && <SvgArt notesPlayed={notesPlayedRef.current} />}
+        {index === 2 && (
+          <SvgArt
+            onRetry={() => setIndex(1)}
+            notesPlayed={notesPlayedRef.current}
+          />
+        )}
       </AnimatePresence>
     </ChakraProvider>
   );

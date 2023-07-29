@@ -1,9 +1,6 @@
 import { NotesPlayed } from 'types/common';
 
 export type SvgArtProps = {
+  onRetry: () => void;
   notesPlayed: NotesPlayed;
-};
-
-export type SvgArtRef = {
-  onLoadArt: (notesPlayed: NotesPlayed) => void;
 };

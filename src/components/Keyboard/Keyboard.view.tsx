@@ -35,6 +35,8 @@ import { FileType, KeyboardProps } from './Keyboard.props';
 
 const synth = new Tone.PolySynth().toDestination();
 
+const DURATION = 24000;
+
 const Keyboard: FC<KeyboardProps> = ({ onCreateArt }) => {
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -66,7 +68,7 @@ const Keyboard: FC<KeyboardProps> = ({ onCreateArt }) => {
       }
 
       setIsRecording(false);
-    }, 27000);
+    }, DURATION);
   };
 
   useEffect(() => {
@@ -199,7 +201,8 @@ const Keyboard: FC<KeyboardProps> = ({ onCreateArt }) => {
             {isRecording ? 'Recording...' : 'Start Recording'}
           </Button>
           <Note>
-            Audio redording will start as soon as you press 'Start' button
+            Audio redording will start as soon as you press 'Start' button and
+            will continue uptill {(DURATION / 1000).toLocaleString()}s
           </Note>
         </>
       )}

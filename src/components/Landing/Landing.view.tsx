@@ -24,8 +24,9 @@ const Landing: FC<LandingProps> = ({ onStartPress }) => {
         <Logo />
         <Description>
           Welcome to MeloDoodle, where your melodies shape visuals! Press keys
-          to create a tune, then watch as our AI transforms your unique sound
-          into a vibrant geometric pattern. Start your symphony of shapes now!
+          to create a tune, then watch as our Algorithm transforms your unique
+          sound into a vibrant geometric pattern. Start your symphony of shapes
+          now!
         </Description>
         <ActionButton onClick={onStartPress}>Try it out</ActionButton>
       </Container>
